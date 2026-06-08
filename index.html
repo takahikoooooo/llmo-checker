@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI検索被視認性 無料診断 | LLMO診断システム</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:        #1558D6;
+  --blue-dark:   #0D3FA6;
+  --blue-light:  #E8F0FE;
+  --blue-mid:    #D0E2FF;
+  --accent:      #0095F6;
+  --red:         #E53935;
+  --red-light:   #FFF0F0;
+  --orange:      #F57C00;
+  --green:       #2E7D32;
+  --green-light: #E8F5E9;
+  --gray-50:     #F8FAFC;
+  --gray-100:    #F1F5F9;
+  --gray-200:    #E2E8F0;
+  --gray-400:    #94A3B8;
+  --gray-600:    #475569;
+  --gray-800:    #1E293B;
+  --white:       #FFFFFF;
+  --text:        #1E293B;
+  --text-sub:    #475569;
+  --radius:      8px;
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.06);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--gray-50);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCREEN ── */
+.screen { display: none; min-height: 100vh; flex-direction: column; align-items: center; }
+.screen.active { display: flex; }
+
+/* ── HEADER ── */
+.site-header {
+  width: 100%;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 0 40px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+.logo {
+  display: flex; align-items: center; gap: 8px;
+}
+.logo-mark {
+  width: 32px; height: 32px;
+  background: var(--blue);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white);
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  font-family: 'Inter', sans-serif;
+}
+.logo-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.logo-name span { color: var(--blue); }
+.header-tag {
+  font-size: 0.72rem;
+  background: var(--blue-light);
+  color: var(--blue);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ── CONTAINER ── */
+.container {
+  width: 100%;
+  max-width: 900px;
+  padding: 0 24px;
+  margin: 0 auto;
+}
+
+/* ══════════════════════════════
+   START SCREEN
+══════════════════════════════ */
+#s-start {
+  background: var(--white);
+}
+
+.start-body {
+  width: 100%;
+  flex: 1;
+}
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 50%, #EDE9FE 100%);
+  padding: 64px 24px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(21,88,214,0.07) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0,149,246,0.07) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(21,88,214,0.1);
+  color: var(--blue);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(21,88,214,0.2);
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.hero h1 .hl {
+  color: var(--blue);
+  position: relative;
+}
+.hero h1 .hl::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--blue), var(--accent));
+  border-radius: 2px;
+  opacity: 0.3;
+}
+
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text-sub);
+  line-height: 1.8;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+/* Stats */
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 44px;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 44px;
+}
+.stat {
+  flex: 1;
+  padding: 20px 16px;
+  text-align: center;
+  border-right: 1px solid var(--gray-100);
+}
+.stat:last-child { border-right: none; }
+.stat-num {
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: var(--blue);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 0.68rem;
+  color: var(--text-sub);
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* URL Form */
+.form-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 32px 36px;
+  max-width: 580px;
+  margin: 0 auto;
+  border: 1px solid var(--gray-200);
+  position: relative;
+  z-index: 1;
+}
+.form-card-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.form-card-sub {
+  font-size: 0.72rem;
+  color: var(--text-sub);
+  margin-bottom: 16px;
+}
+.url-wrap {
+  display: flex;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: var(--white);
+}
+.url-wrap:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(21,88,214,0.1);
+}
+.url-pre {
+  padding: 12px 14px;
+  background: var(--gray-50);
+  border-right: 1.5px solid var(--gray-200);
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+#urlInput {
+  flex: 1;
+  padding: 12px 14px;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  color: var(--text);
+  font-family: 'Inter', monospace;
+  background: transparent;
+}
+#urlInput::placeholder { color: var(--gray-400); }
+
+.start-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+  color: var(--white);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(21,88,214,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.start-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(21,88,214,0.45);
+}
+.start-btn svg { width: 16px; height: 16px; }
+
+.form-note {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  color: var(--gray-400);
+  margin-top: 10px;
+  justify-content: center;
+}
+
+/* Features strip */
+.features-strip {
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+  padding: 28px 24px;
+}
+.features-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  font-weight: 500;
+}
+.feature-icon {
+  width: 36px; height: 36px;
+  background: var(--blue-light);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════
+   LOADING SCREEN
+══════════════════════════════ */
+#s-loading {
+  background: var(--white);
+  justify-content: center;
+  align-items: center;
+}
+.loading-box {
+  text-align: center;
+  padding: 48px 32px;
+  max-width: 420px;
+}
+
+.loader-ring {
+  width: 80px; height: 80px;
+  margin: 0 auto 28px;
+  position: relative;
+}
+.loader-ring svg {
+  width: 80px; height: 80px;
+  animation: spin-slow 1.4s linear infinite;
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+
+.loading-h {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.loading-domain {
+  font-size: 0.82rem;
+  color: var(--blue);
+  font-family: 'Inter', monospace;
+  font-weight: 600;
+  margin-bottom: 28px;
+  word-break: break-all;
+}
+.step-list {
+  list-style: none;
+  text-align: left;
+  display: inline-block;
+  min-width: 260px;
+}
+.step-list li {
+  font-size: 0.82rem;
+  color: var(--gray-400);
+  padding: 7px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--gray-100);
+  transition: color 0.3s;
+}
+.step-list li:last-child { border-bottom: none; }
+.step-list li.done { color: var(--blue); }
+.step-list li.active { color: var(--text); }
+.step-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--gray-200);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.step-list li.done .step-dot {
+  background: var(--blue);
+  color: var(--white);
+}
+.step-list li.active .step-dot {
+  background: var(--blue);
+  color: var(--white);
+  animation: pulse-dot 0.8s ease infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(0.85); }
+}
+
+/* ══════════════════════════════
+   QUIZ SCREEN
+══════════════════════════════ */
+#s-quiz {
+  background: var(--gray-50);
+  justify-content: flex-start;
+  align-items: center;
+  padding-bottom: 60px;
+}
+.quiz-wrap {
+  width: 100%;
+  max-width: 700px;
+  padding: 36px 24px;
+}
+
+/* Progress */
+.prog-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.prog-steps {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.prog-step {
+  flex: 1;
+  height: 4px;
+  background: var(--gray-200);
+  border-radius: 2px;
+  transition: background 0.4s;
+}
+.prog-step.done { background: var(--blue); }
+.prog-step.active { background: var(--accent); }
+.prog-label {
+  font-size: 0.75rem;
+  color: var(--text-sub);
+  font-weight: 600;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Question card */
+.q-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  padding: 32px;
+  margin-bottom: 16px;
+  animation: fadeSlideUp 0.3s ease;
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.q-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.q-eyebrow::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--blue-mid);
+}
+
+.q-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.choice-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  color: var(--text-sub);
+  font-size: 0.88rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Noto Sans JP', sans-serif;
+  line-height: 1.6;
+  width: 100%;
+}
+.choice-btn:hover {
+  border-color: var(--blue);
+  background: var(--blue-light);
+  color: var(--text);
+}
+.choice-btn.selected {
+  border-color: var(--blue);
+  background: var(--blue-light);
+  color: var(--blue-dark);
+}
+.choice-alpha {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  border: 1.5px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-sub);
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+}
+.choice-btn:hover .choice-alpha,
+.choice-btn.selected .choice-alpha {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--white);
+}
+
+/* next-btn は非表示（選択即遷移のため不使用） */
+.next-btn { display: none !important; }
+
+/* 戻るボタン */
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  color: var(--text-sub);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.back-btn:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--blue-light);
+}
+.back-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════
+   CALCULATING SCREEN
+══════════════════════════════ */
+#s-calc {
+  background: var(--white);
+  justify-content: center;
+  align-items: center;
+}
+.calc-box {
+  text-align: center;
+  padding: 48px 32px;
+  max-width: 380px;
+}
+.calc-spinner {
+  width: 56px; height: 56px;
+  border: 4px solid var(--gray-200);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin-slow 0.9s linear infinite;
+  margin: 0 auto 24px;
+}
+.calc-h {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.calc-sub {
+  font-size: 0.82rem;
+  color: var(--text-sub);
+  margin-bottom: 28px;
+}
+.calc-bars { width: 100%; }
+.calc-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.calc-row-label {
+  font-size: 0.72rem;
+  color: var(--text-sub);
+  width: 100px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.calc-track {
+  flex: 1;
+  height: 5px;
+  background: var(--gray-100);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.calc-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--accent));
+  border-radius: 3px;
+  width: 0;
+  animation: grow-bar 2.2s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes grow-bar { to { width: var(--tw, 60%); } }
+
+/* ══════════════════════════════
+   RESULT SCREEN
+══════════════════════════════ */
+#s-result {
+  background: var(--gray-50);
+  justify-content: flex-start;
+  align-items: center;
+  padding-bottom: 80px;
+}
+.result-wrap {
+  width: 100%;
+  max-width: 800px;
+  padding: 36px 24px;
+}
+
+/* Result header */
+.result-header {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  padding: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+.result-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+.result-type {
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.result-type .type-code {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9em;
+  margin-right: 6px;
+}
+.result-summary {
+  font-size: 0.88rem;
+  color: var(--text-sub);
+  line-height: 1.8;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* Score panel */
+.score-panel {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.gauge-wrap {
+  position: relative;
+  width: 130px; height: 130px;
+  flex-shrink: 0;
+}
+.gauge-svg { width: 130px; height: 130px; transform: rotate(-90deg); }
+.gauge-bg { fill: none; stroke: var(--gray-100); stroke-width: 10; }
+.gauge-fill {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 314;
+  stroke-dashoffset: 314;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1);
+}
+.gauge-center {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+.gauge-num {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+  font-family: 'Inter', sans-serif;
+}
+.gauge-unit { font-size: 0.65rem; color: var(--text-sub); margin-top: 2px; }
+
+.score-metrics { flex: 1; min-width: 200px; }
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 0.84rem;
+}
+.metric-row:last-child { border-bottom: none; }
+.metric-label { color: var(--text-sub); }
+.metric-val { font-weight: 700; font-family: 'Inter', sans-serif; font-size: 0.9rem; }
+.val-red    { color: var(--red); }
+.val-orange { color: var(--orange); }
+.val-blue   { color: var(--blue); }
+.val-gray   { color: var(--gray-600); }
+
+/* Issues */
+.issues-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+.card-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-section-title::before {
+  content: '';
+  width: 3px; height: 14px;
+  background: var(--red);
+  border-radius: 2px;
+}
+
+.issue-item {
+  display: flex;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--text-sub);
+}
+.issue-item:last-child { border-bottom: none; }
+.issue-dot {
+  width: 20px; height: 20px;
+  background: var(--red-light);
+  border: 1.5px solid rgba(229,57,53,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--red);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.issue-item strong { color: var(--text); }
+
+/* Main CTA */
+.main-cta-card {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+  border-radius: 12px;
+  padding: 36px 32px;
+  margin-bottom: 16px;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(21,88,214,0.3);
+}
+.main-cta-card::before {
+  content: '';
+  position: absolute; top: -80px; right: -80px;
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.cta-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.cta-eyebrow .dot {
+  width: 6px; height: 6px;
+  background: #FFC107;
+  border-radius: 50%;
+  animation: blink 1.4s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.main-cta-h {
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.main-cta-desc {
+  font-size: 0.86rem;
+  line-height: 1.8;
+  opacity: 0.85;
+  margin-bottom: 20px;
+}
+.cta-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.cta-chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.cta-chip::before { content: '✓'; font-weight: 900; opacity: 0.8; }
+
+.aff-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--white);
+  color: var(--blue-dark);
+  font-size: 0.95rem;
+  font-weight: 800;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.aff-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+}
+.aff-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* Sub CTA */
+.sub-cta-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.sub-cta-icon {
+  width: 44px; height: 44px;
+  background: var(--blue-light);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.sub-cta-body { flex: 1; min-width: 0; }
+.sub-cta-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+.sub-cta-desc {
+  font-size: 0.77rem;
+  color: var(--text-sub);
+  line-height: 1.6;
+}
+.sub-cta-action { flex-shrink: 0; }
+.sub-aff-btn {
+  white-space: nowrap;
+  padding: 11px 20px;
+  background: var(--white);
+  border: 1.5px solid var(--blue);
+  color: var(--blue);
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.02em;
+}
+.sub-aff-btn:hover {
+  background: var(--blue);
+  color: var(--white);
+}
+
+/* Restart */
+.restart-row {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 0.8rem;
+  color: var(--gray-400);
+}
+.restart-row a {
+  color: var(--blue);
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+.restart-row a:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .site-header { padding: 0 20px; }
+  .hero { padding: 44px 20px 40px; }
+  .form-card { padding: 24px 20px; }
+  .hero-stats { max-width: 100%; }
+  .q-card { padding: 24px 20px; }
+  .score-panel { padding: 20px; }
+  .main-cta-card { padding: 24px 20px; }
+  .features-inner { gap: 20px; }
+  .sub-cta-card { flex-wrap: wrap; gap: 14px; }
+  .sub-cta-action { width: 100%; }
+  .sub-aff-btn { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-mark">AI</div>
+    <div class="logo-name">LLMO<span>Checker</span></div>
+  </div>
+  <div class="header-tag">無料 AI診断</div>
+</header>
+
+<!-- ══════════════════════════════
+     START SCREEN
+══════════════════════════════ -->
+<section class="screen active" id="s-start">
+  <div class="start-body">
+
+    <div class="hero">
+      <div class="hero-eyebrow">⚡ 無料・約3分で完了</div>
+      <h1>AI検索で<br><span class="hl">選ばれる企業</span>に<br>なれていますか？</h1>
+      <p class="hero-sub">
+        ChatGPT・Perplexity・Geminiに「おすすめされる企業」と<br>
+        「完全にスルーされる企業」の二極化が急速に進んでいます。<br>
+        御社のAI被視認性スコアを今すぐ無料で確認してください。
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">73%</div>
+          <div class="stat-label">企業が<br>LLMO未対応</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">8秒</div>
+          <div class="stat-label">AI回答の<br>平均参照時間</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3社</div>
+          <div class="stat-label">AIに紹介される<br>平均社数</div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="form-card-title">診断する企業サイトのURLを入力</div>
+        <div class="form-card-sub">会社のWebサイトURLを入力して診断を開始してください</div>
+        <div class="url-wrap">
+          <div class="url-pre">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            https://
+          </div>
+          <input type="text" id="urlInput" placeholder="example.co.jp" autocomplete="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <button class="start-btn" onclick="handleStart()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          無料で診断スタート →
+        </button>
+        <div class="form-note">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          入力情報は外部に公開されません
+        </div>
+      </div>
+    </div>
+
+    <div class="features-strip">
+      <div class="features-inner">
+        <div class="feature-item">
+          <div class="feature-icon">⏱</div>
+          <div>所要時間<strong style="display:block;color:var(--text)">約3分</strong></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔍</div>
+          <div>診断項目<strong style="display:block;color:var(--text)">全8問</strong></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div>AIスコア<strong style="display:block;color:var(--text)">即時算出</strong></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💼</div>
+          <div>対象<strong style="display:block;color:var(--text)">法人・個人事業主</strong></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     LOADING SCREEN
+══════════════════════════════ -->
+<section class="screen" id="s-loading">
+  <div class="loading-box">
+    <div class="loader-ring">
+      <svg viewBox="0 0 80 80">
+        <circle cx="40" cy="40" r="34" fill="none" stroke="#E2E8F0" stroke-width="6"/>
+        <circle cx="40" cy="40" r="34" fill="none" stroke="#1558D6" stroke-width="6"
+          stroke-dasharray="100 214" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="loading-h">AIクローラーが御社のサイトを解析中...</div>
+    <div class="loading-domain" id="loadingUrl"></div>
+    <ul class="step-list" id="loadingSteps">
+      <li id="ls1"><span class="step-dot">1</span>ドメイン評価 (DR) を取得中</li>
+      <li id="ls2"><span class="step-dot">2</span>Web上のサイテーション数を確認中</li>
+      <li id="ls3"><span class="step-dot">3</span>AI被視認性スコアを算出中</li>
+      <li id="ls4"><span class="step-dot">4</span>診断データを準備中</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     QUIZ SCREEN
+══════════════════════════════ -->
+<section class="screen" id="s-quiz">
+  <div class="quiz-wrap">
+    <div class="prog-header">
+      <button class="back-btn" id="backBtn" onclick="prevQuestion()" disabled>
+        ← 戻る
+      </button>
+      <div class="prog-steps" id="progSteps"></div>
+      <div class="prog-label" id="progLabel">1 / 8</div>
+    </div>
+    <div class="q-card" id="qCard">
+      <div class="q-eyebrow" id="qNum">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="choices" id="choices"></div>
+    </div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">次の質問へ →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     CALCULATING SCREEN
+══════════════════════════════ -->
+<section class="screen" id="s-calc">
+  <div class="calc-box">
+    <div class="calc-spinner"></div>
+    <div class="calc-h">スコアを算出しています</div>
+    <div class="calc-sub">AIビジビリティを多角的に分析中...</div>
+    <div class="calc-bars">
+      <div class="calc-row">
+        <span class="calc-row-label">AI認知度</span>
+        <div class="calc-track"><div class="calc-fill" style="--tw:45%;animation-delay:0s"></div></div>
+      </div>
+      <div class="calc-row">
+        <span class="calc-row-label">構造化評価</span>
+        <div class="calc-track"><div class="calc-fill" style="--tw:30%;animation-delay:0.3s"></div></div>
+      </div>
+      <div class="calc-row">
+        <span class="calc-row-label">サイテーション</span>
+        <div class="calc-track"><div class="calc-fill" style="--tw:22%;animation-delay:0.6s"></div></div>
+      </div>
+      <div class="calc-row">
+        <span class="calc-row-label">競合比較</span>
+        <div class="calc-track"><div class="calc-fill" style="--tw:38%;animation-delay:0.9s"></div></div>
+      </div>
+      <div class="calc-row">
+        <span class="calc-row-label">総合スコア</span>
+        <div class="calc-track"><div class="calc-fill" style="--tw:28%;animation-delay:1.2s"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     RESULT SCREEN
+══════════════════════════════ -->
+<section class="screen" id="s-result">
+  <div class="result-wrap">
+
+    <div class="result-header">
+      <div class="result-tag" id="resultTag">診断完了</div>
+      <div class="result-type" id="diagTypeName"></div>
+      <p class="result-summary" id="diagSummary"></p>
+    </div>
+
+    <div class="score-panel">
+      <div class="gauge-wrap">
+        <svg class="gauge-svg" viewBox="0 0 100 100">
+          <circle class="gauge-bg" cx="50" cy="50" r="44"/>
+          <circle class="gauge-fill" id="gaugeFill" cx="50" cy="50" r="44"/>
+        </svg>
+        <div class="gauge-center">
+          <div class="gauge-num" id="gaugeNum">--</div>
+          <div class="gauge-unit">/ 100</div>
+        </div>
+      </div>
+      <div class="score-metrics" id="scoreMetrics"></div>
+    </div>
+
+    <div class="issues-card">
+      <div class="card-section-title">検出された問題点</div>
+      <div id="issuesList"></div>
+    </div>
+
+    <!-- Main CTA -->
+    <div class="main-cta-card">
+      <div class="cta-eyebrow"><span class="dot"></span>毎月5社限定 — 無料個別戦略会</div>
+      <div class="main-cta-h">
+        LLMO（AI検索最適化）個別オンライン戦略会<br>
+        完全無料でAI対策の全貌をお伝えします
+      </div>
+      <p class="main-cta-desc">
+        診断結果をもとに、専門コンサルタントが御社のAI検索被視認性の課題と、
+        3ヶ月で競合を抜き去るための具体的なLLMO施策をZoomにてご説明します。
+        先着5社限定のため、枠が埋まる前にご予約ください。
+      </p>
+      <div class="cta-chips">
+        <span class="cta-chip">完全無料</span>
+        <span class="cta-chip">Zoom 60分</span>
+        <span class="cta-chip">AI検索露出レポート付き</span>
+        <span class="cta-chip">翌営業日中に連絡</span>
+      </div>
+      <button class="aff-btn" onclick="affClick('main')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+        【Zoom】無料で自社のAI対策相談を予約する →
+      </button>
+    </div>
+
+    <!-- Sub CTA -->
+    <div class="sub-cta-card">
+      <div class="sub-cta-icon">📋</div>
+      <div class="sub-cta-body">
+        <div class="sub-cta-title">【個別配布】LLMO個別詳細資料</div>
+        <div class="sub-cta-desc">診断結果を基に、今日から使えるAI検索最適化のための課題箇所と改善提案を致します。社内展開可能なPDFを無料でお渡しします。</div>
+      </div>
+      <div class="sub-cta-action">
+        <button class="sub-aff-btn" onclick="affClick('sub1')">無料でダウンロード →</button>
+      </div>
+    </div>
+
+    <div class="restart-row">
+      <a onclick="restart()">▶ もう一度診断する</a>
+      &nbsp;|&nbsp;
+      <a href="https://line.me/R/ti/p/" target="_blank">LINEで共有する</a>
+    </div>
+
+  </div>
+</section>
+
+<script>
+/* ── 設問データ ── */
+const QUESTIONS = [
+  { id:1, text:'ChatGPT等のAIに自社名を入力した際、正しい企業情報・サービス内容が一発で返ってきますか？', choices:[
+    {label:'A',text:'はい、企業名・サービス・特徴まで正確に回答される',score:4},
+    {label:'B',text:'企業名は認識されるが、内容がやや古いまたは不正確',score:2},
+    {label:'C',text:'企業名は出るが、競合や全く関係ない情報が混在する',score:1},
+    {label:'D',text:'ほぼ認識されない、または試したことがない',score:0},
+  ]},
+  { id:2, text:'自社サイトに構造化データ（JSON-LD / Schema.org）は実装されていますか？', choices:[
+    {label:'A',text:'はい、Organization・FAQPage等を正しく実装済み',score:4},
+    {label:'B',text:'一部のページにのみ実装されている',score:2},
+    {label:'C',text:'実装しているかどうか分からない',score:1},
+    {label:'D',text:'未実装である（または何のことか知らなかった）',score:0},
+  ]},
+  { id:3, text:'御社の主要キーワードでAI検索した際、御社は「おすすめ企業」として出てきますか？', choices:[
+    {label:'A',text:'はい、主要キーワードで定期的におすすめされる',score:4},
+    {label:'B',text:'一部のキーワードでは出るが、メインKWでは出ない',score:2},
+    {label:'C',text:'競合他社ばかりが紹介され、自社は一切出てこない',score:0},
+    {label:'D',text:'AI検索での露出を確認したことがない',score:1},
+  ]},
+  { id:4, text:'Web上（業界メディア・ニュースサイト・第三者ブログ等）で自社名・サービス名が言及（サイテーション）されている頻度は？', choices:[
+    {label:'A',text:'月10件以上、権威ある媒体で定期的に言及される',score:4},
+    {label:'B',text:'月数件程度（プレスリリース・SNS含む）',score:2},
+    {label:'C',text:'自社サイト以外での言及がほぼない',score:0},
+    {label:'D',text:'サイテーション数を把握していない',score:1},
+  ]},
+  { id:5, text:'Perplexityや生成AI検索（Googleの「AIによる概要」等）への最適化を意識したコンテンツ制作をしていますか？', choices:[
+    {label:'A',text:'はい、専担者がLLMO/AIOを意識してコンテンツ設計している',score:4},
+    {label:'B',text:'SEOは意識しているが、LLMO視点はまだ取り入れていない',score:2},
+    {label:'C',text:'LLMOという概念は知っているが、特に対策していない',score:1},
+    {label:'D',text:'LLMOという言葉を初めて聞いた',score:0},
+  ]},
+  { id:6, text:'自社の公式サイトのコンテンツ更新頻度と、オリジナル一次情報（独自調査・事例・見解）の割合は？', choices:[
+    {label:'A',text:'週1回以上更新、60%以上が独自の一次情報コンテンツ',score:4},
+    {label:'B',text:'月数回更新、一次情報とまとめ記事が混在している',score:2},
+    {label:'C',text:'更新は不定期で、コンテンツの多くが汎用的な情報',score:1},
+    {label:'D',text:'サイトは3年以上更新されていない（または更新する余裕がない）',score:0},
+  ]},
+  { id:7, text:'SNS・YouTubeや外部プロフィールページ（Crunchbase・業界DB等）での自社情報は統一・構造化されていますか？', choices:[
+    {label:'A',text:'はい、全プラットフォームで情報が統一・最新に保たれている',score:4},
+    {label:'B',text:'主要SNSは管理しているが、外部DBは手つかず',score:2},
+    {label:'C',text:'SNSもほぼ更新されておらず、情報が散漫',score:1},
+    {label:'D',text:'外部での情報整備をほとんどしていない',score:0},
+  ]},
+  { id:8, text:'AI時代のWeb集客対策（LLMO/AIO対策含む）に対する予算・リソース投資の現状は？', choices:[
+    {label:'A',text:'専任担当または外部パートナーを活用して積極投資している',score:4},
+    {label:'B',text:'SEO予算の一部をAI対策に転用することを検討中',score:2},
+    {label:'C',text:'重要性は認識しているが、予算化されていない',score:1},
+    {label:'D',text:'AI対策を予算化する必要性を感じていない',score:0},
+  ]},
+];
+
+/* ── 診断タイプ ── */
+const DIAG_TYPES = {
+  L:  { code:'L',  name:'【手遅れ寸前】AI検索完全埋没タイプ',                      color:'#E53935', gaugeColor:'#E53935',
+    summary:'ChatGPT・Perplexity・Geminiのすべてで御社の存在が認識されていない可能性が極めて高い状態です。競合他社がAI検索で名前を呼ばれる一方、御社は検索結果から完全に脱落しています。今すぐ構造的な対策を取らなければ、デジタルリードの流失は加速するばかりです。',
+    tagBg:'#FEE2E2', tagColor:'#E53935',
+    issues:[
+      {text:'<strong>AI検索での認知度がほぼゼロ</strong>に近く、潜在顧客がAIに問い合わせても御社が紹介されない状態'},
+      {text:'<strong>構造化データが未実装</strong>のため、AIクローラーが御社サイトを正しく解読できていない'},
+      {text:'<strong>Web上のサイテーションが極端に少なく</strong>、AI学習データベースへの登録が不十分'},
+      {text:'<strong>一次情報コンテンツが不足</strong>しており、AI検索エンジンの信頼スコアが著しく低い'},
+    ]},
+  C:  { code:'C',  name:'【機会損失大】AIからの認知度20%の発展途上タイプ',          color:'#F57C00', gaugeColor:'#F57C00',
+    summary:'御社の名前はAIに認識されているものの、主要キーワードや業界クエリでは競合に大きく水を開けられています。現状では潜在顧客の約80%がAI検索で競合他社に流れていると試算されます。基盤は作られつつあるため、今が投資の正念場です。',
+    tagBg:'#FFF3E0', tagColor:'#F57C00',
+    issues:[
+      {text:'<strong>主要キーワードでのAI露出が競合比で20%以下</strong>の推計。見込み顧客の大半が競合サイトへ誘導されている'},
+      {text:'<strong>構造化データの整備が不完全</strong>で、AIが御社の専門性・信頼性を正確に読み取れていない'},
+      {text:'<strong>外部サイテーション数が不足</strong>しており、AI学習データへの反映が遅れている'},
+    ]},
+  S:  { code:'S',  name:'【惜しい】テキスト過多でAIに読まれない非構造化タイプ',      color:'#0277BD', gaugeColor:'#0277BD',
+    summary:'コンテンツの量は揃っているものの、AIが「理解しやすい形式」になっていないため、情報が適切に参照されていません。文章量よりも構造・フォーマット・メタデータの整備が急務です。適切に最適化すれば、3ヶ月以内にAI露出が大幅改善する見込みがあります。',
+    tagBg:'#E3F2FD', tagColor:'#0277BD',
+    issues:[
+      {text:'<strong>非構造化テキストが多く</strong>、AIが主要情報をパースできずにコンテンツをスキップしている'},
+      {text:'<strong>JSON-LDやFAQSchema等が未整備</strong>で、AIに直接回答データとして参照されない'},
+      {text:'<strong>コンテンツのE-E-A-T評価が低く</strong>、AI検索エンジンの信頼度スコアが伸び悩んでいる'},
+    ]},
+  A:  { code:'A',  name:'【要警戒】競合にAIシェアを奪われ中のイエローカードタイプ',  color:'#F9A825', gaugeColor:'#F9A825',
+    summary:'御社のAI検索基盤は一定水準に達していますが、特定の競合企業がLLMO投資を加速させており、AIシェアが侵食されつつあります。「現状維持＝後退」のフェーズに入っており、今こそ差別化されたLLMO戦略が必要です。',
+    tagBg:'#FFFDE7', tagColor:'#F9A825',
+    issues:[
+      {text:'<strong>特定の競合企業にAI推薦シェアを奪われている</strong>兆候あり。月次モニタリングが必要な状態'},
+      {text:'<strong>一次情報コンテンツの更新頻度が競合より低く</strong>、AI学習データの新鮮度で差が開きつつある'},
+      {text:'<strong>SNS・外部プラットフォームでの情報統一が不完全</strong>で、AIが参照する企業データに矛盾が生じている'},
+    ]},
+  Ch: { code:'Ch', name:'【土台あり】あと一歩でAIおすすめ枠に入れるポテンシャルタイプ', color:'#2E7D32', gaugeColor:'#2E7D32',
+    summary:'LLMOの土台はしっかり構築されています。構造化データ・サイテーション・コンテンツ品質のどれかを集中的に強化することで、3ヶ月以内に主要AI検索での「おすすめ企業」枠への参入が現実的に見えています。ここからが勝負どころです。',
+    tagBg:'#E8F5E9', tagColor:'#2E7D32',
+    issues:[
+      {text:'<strong>上位表示まで「あと一手」の状態</strong>。特定の施策（サイテーション強化・構造化データ拡充等）で急上昇の可能性あり'},
+      {text:'<strong>競合との差が僅差</strong>のため、継続的なモニタリングと素早いコンテンツアップデートが重要'},
+    ]},
+  Sp: { code:'Sp', name:'【絶滅危惧】公式サイトが古い独自ガラパゴスタイプ',          color:'#6A1B9A', gaugeColor:'#6A1B9A',
+    summary:'御社のWebサイトおよびデジタルプレゼンスが現代のAI基準から大きく乖離しています。AIが「読める・信頼できる・引用できる」サイトへの抜本的なリニューアルと情報整備が最優先課題です。このまま放置すると、デジタル経路からのリード獲得がほぼゼロになるリスクがあります。',
+    tagBg:'#F3E5F5', tagColor:'#6A1B9A',
+    issues:[
+      {text:'<strong>サイトのHTML構造が古く</strong>、現代のAIクローラーが情報を正しく抽出できない状態'},
+      {text:'<strong>サイト更新が長期停滞</strong>しており、AI学習データから「活動していない企業」と判定される可能性'},
+      {text:'<strong>モバイル最適化・ページ速度が不十分</strong>で、AIが信頼性スコアを低く評価している'},
+      {text:'<strong>外部プラットフォームとの情報連携がほぼゼロ</strong>で、AIによる企業エンティティ認識が失敗している'},
+    ]},
+};
+
+/* ── State ── */
+let state = { url:'', ahrefsData:null, currentQ:0, answers:[], totalScore:0, diagType:null };
+
+/* ── Screen ── */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+/* ── Start ── */
+async function handleStart() {
+  const raw = document.getElementById('urlInput').value.trim();
+  if (!raw) {
+    const w = document.querySelector('.url-wrap');
+    w.style.borderColor = '#E53935';
+    w.style.boxShadow = '0 0 0 3px rgba(229,57,53,0.1)';
+    setTimeout(() => { w.style.borderColor=''; w.style.boxShadow=''; }, 2000);
+    return;
+  }
+  let url = raw.replace(/^https?:\/\//i,'');
+  url = 'https://' + url;
+  state.url = url;
+  document.getElementById('loadingUrl').textContent = url;
+  showScreen('s-loading');
+
+  const steps = [
+    {el:'ls1',delay:600,done:1200},
+    {el:'ls2',delay:1400,done:2200},
+    {el:'ls3',delay:2400,done:3200},
+    {el:'ls4',delay:3400,done:4000},
+  ];
+  steps.forEach(s => {
+    setTimeout(() => { document.getElementById(s.el).classList.add('active'); }, s.delay);
+    setTimeout(() => {
+      const el = document.getElementById(s.el);
+      el.classList.remove('active');
+      el.classList.add('done');
+      el.querySelector('.step-dot').textContent = '✓';
+    }, s.done);
+  });
+
+  try {
+    const domain = url.replace(/^https?:\/\//i,'').split('/')[0];
+    const resp = await fetch(`/api/check-llmo?url=${encodeURIComponent(domain)}`);
+    if (resp.ok) state.ahrefsData = await resp.json();
+  } catch(e) { state.ahrefsData = null; }
+
+  setTimeout(() => { state.currentQ=0; state.answers=[]; showScreen('s-quiz'); renderQuestion(); }, 4600);
+}
+
+/* ── Quiz ── */
+function renderQuestion() {
+  const q = QUESTIONS[state.currentQ];
+  const idx = state.currentQ;
+  const total = QUESTIONS.length;
+
+  // 戻るボタンの有効/無効
+  const backBtn = document.getElementById('backBtn');
+  backBtn.disabled = idx === 0;
+
+  // Progress dots
+  let stepsHtml = '';
+  for(let i=0;i<total;i++){
+    let cls = i<idx?'done':i===idx?'active':'';
+    stepsHtml += `<div class="prog-step ${cls}"></div>`;
+  }
+  document.getElementById('progSteps').innerHTML = stepsHtml;
+  document.getElementById('progLabel').textContent = `${idx+1} / ${total}`;
+  document.getElementById('qNum').textContent = `QUESTION ${String(idx+1).padStart(2,'0')}`;
+  document.getElementById('qText').textContent = q.text;
+
+  // 既回答の選択肢インデックスを復元
+  const savedScore = state.answers[idx];
+  const savedChoiceIdx = (savedScore !== undefined)
+    ? q.choices.findIndex(c => c.score === savedScore)
+    : -1;
+
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  q.choices.forEach((c,ci) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn' + (ci === savedChoiceIdx ? ' selected' : '');
+    btn.innerHTML = `<span class="choice-alpha">${c.label}</span>${c.text}`;
+    btn.onclick = () => selectChoice(ci, c.score);
+    choicesEl.appendChild(btn);
+  });
+
+  // Re-trigger animation
+  const card = document.getElementById('qCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = '';
+}
+
+function selectChoice(idx, score) {
+  // 選択済みならそのままにして二重遷移防止
+  if (state.answers[state.currentQ] !== undefined) return;
+
+  // 選択状態を即時反映
+  document.querySelectorAll('.choice-btn').forEach((b,i) => b.classList.toggle('selected', i===idx));
+  // ボタンを一時的に無効化（連打防止）
+  document.querySelectorAll('.choice-btn').forEach(b => b.style.pointerEvents = 'none');
+
+  state.answers[state.currentQ] = score;
+
+  // 150ms後に次へ（選択の視覚フィードバックを見せてから遷移）
+  setTimeout(() => {
+    state.currentQ++;
+    if (state.currentQ >= QUESTIONS.length) computeResult();
+    else { renderQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
+  }, 180);
+}
+
+function nextQuestion() {
+  if (state.answers[state.currentQ] === undefined) return;
+  state.currentQ++;
+  if (state.currentQ >= QUESTIONS.length) computeResult();
+  else { renderQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+
+function prevQuestion() {
+  if (state.currentQ <= 0) return;
+  state.currentQ--;
+  // 戻った問の回答を一度リセットして再選択できるようにする
+  state.answers[state.currentQ] = undefined;
+  renderQuestion();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ── Compute ── */
+function computeResult() {
+  showScreen('s-calc');
+  const quizScore = state.answers.reduce((a,b)=>a+b,0);
+  let normalizedQuiz = Math.round((quizScore/32)*70);
+  let dr=0, citations=0, ahrefsBonus=10;
+  if (state.ahrefsData) {
+    dr = state.ahrefsData.domain_rating || 0;
+    citations = state.ahrefsData.referring_domains || 0;
+    ahrefsBonus = Math.min(20, Math.round((dr/80)*20)) + Math.min(10, Math.round((Math.min(citations,100)/100)*10));
+  } else { dr='--'; citations='--'; }
+  const totalScore = Math.min(100, normalizedQuiz + ahrefsBonus);
+  state.totalScore = totalScore;
+  let diagKey = totalScore<=18?'L':totalScore<=30?'C':totalScore<=42?'Sp':totalScore<=55?'S':totalScore<=70?'A':'Ch';
+  if (state.answers[5]===0 && state.answers[1]===0 && totalScore<50) diagKey='Sp';
+  if (state.answers[0]===4 && totalScore>=45) diagKey='Ch';
+  state.diagType = diagKey;
+  setTimeout(() => renderResult(dr,citations), 2800);
+}
+
+/* ── Render Result ── */
+function renderResult(dr, citations) {
+  const type = DIAG_TYPES[state.diagType];
+  const score = state.totalScore;
+  showScreen('s-result');
+
+  // Tag
+  const tag = document.getElementById('resultTag');
+  tag.textContent = type.name.match(/【.*?】/)?.[0] || '診断完了';
+  tag.style.background = type.tagBg;
+  tag.style.color = type.tagColor;
+
+  // Name
+  document.getElementById('diagTypeName').innerHTML =
+    `<span class="type-code" style="color:${type.color}">${type.code}</span>${type.name.replace(/【.*?】/,'').trim()}`;
+
+  // Summary
+  document.getElementById('diagSummary').textContent = type.summary;
+
+  // Gauge
+  const gaugeEl = document.getElementById('gaugeFill');
+  gaugeEl.style.stroke = type.gaugeColor;
+  const circ = 2*Math.PI*44;
+  document.getElementById('gaugeNum').textContent = score;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    gaugeEl.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)';
+    gaugeEl.style.strokeDasharray = circ;
+    gaugeEl.style.strokeDashoffset = circ;
+    requestAnimationFrame(() => { gaugeEl.style.strokeDashoffset = circ - (score/100)*circ; });
+  }));
+
+  // Metrics
+  const drD = typeof dr==='number'?dr:'--';
+  const citD = typeof citations==='number'?citations.toLocaleString():'--';
+  const qScore = state.answers.reduce((a,b)=>a+b,0);
+  const riskLabel = score<40?'危険':score<60?'要注意':'標準以上';
+  const scoreClass = score<40?'val-red':score<60?'val-orange':'val-blue';
+  document.getElementById('scoreMetrics').innerHTML = `
+    <div class="metric-row"><span class="metric-label">総合LLMOスコア</span><span class="metric-val ${scoreClass}">${score} / 100</span></div>
+    <div class="metric-row"><span class="metric-label">診断回答スコア</span><span class="metric-val val-gray">${qScore} / 32</span></div>
+    <div class="metric-row"><span class="metric-label">ドメインレーティング (DR)</span><span class="metric-val ${drD==='--'||drD<20?'val-red':drD<50?'val-orange':'val-blue'}">${drD}</span></div>
+    <div class="metric-row"><span class="metric-label">被参照ドメイン数</span><span class="metric-val ${citD==='--'||parseInt(citD)<20?'val-red':'val-orange'}">${citD}</span></div>
+    <div class="metric-row"><span class="metric-label">AI被視認性リスク</span><span class="metric-val ${scoreClass}">${riskLabel}</span></div>
+  `;
+
+  // Issues
+  document.getElementById('issuesList').innerHTML = type.issues.map(issue => `
+    <div class="issue-item">
+      <div class="issue-dot">!</div>
+      <div>${issue.text}</div>
+    </div>
+  `).join('');
+}
+
+/* ── CTA ── */
+function affClick(type) {
+  const URLS = { main:'https://booking.trinias.co.jp/#/k-nakatsuji', sub1:'https://line.me/R/ti/p/@974udmkr' };
+  const url = URLS[type]||'#';
+  if(url!=='#') window.open(url,'_blank');
+}
+
+/* ── Restart ── */
+function restart() {
+  state = {url:'',ahrefsData:null,currentQ:0,answers:[],totalScore:0,diagType:null};
+  document.getElementById('urlInput').value='';
+  ['ls1','ls2','ls3','ls4'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.className='';
+    el.querySelector('.step-dot').textContent=el.dataset.n||'';
+  });
+  showScreen('s-start');
+}
+
+document.getElementById('urlInput').addEventListener('keydown', e => { if(e.key==='Enter') handleStart(); });
+</script>
+</body>
+</html>
