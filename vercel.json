@@ -21,10 +21,6 @@
       "dest": "/index.html"
     }
   ],
-  "env": {
-    "AHREFS_API_KEY": "@ahrefs_api_key",
-    "ALLOWED_ORIGIN": "@allowed_origin"
-  },
   "headers": [
     {
       "source": "/api/(.*)",
