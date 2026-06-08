@@ -1,6 +1,6 @@
 /**
  * api/check-llmo.js
- * Vercel Serverless Function — Ahrefs API 中継エンドポイント（v3データ構造完全対応版）
+ * Vercel Serverless Function — Ahrefs API 中継エンドポイント（v3配列構造完全適応版）
  */
 
 const cache = new Map();
@@ -24,7 +24,6 @@ export default async function handler(req, res) {
   // APIキー確認
   const apiKey = process.env.AHREFS_API_KEY;
   if (!apiKey) {
-    console.error('[check-llmo] AHREFS_API_KEY が設定されていません');
     return res.status(500).json({ error: 'Server configuration error', source: 'internal' });
   }
 
@@ -47,30 +46,10 @@ export default async function handler(req, res) {
   // キャッシュチェック
   const cached = cache.get(domain);
   if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
-    console.log(`[check-llmo] キャッシュヒット: ${domain}`);
     return res.status(200).json({ ...cached.data, cached: true });
   }
 
   try {
-    // 1. ドメインレーティング
-    const drUrl = new URL('https://api.ahrefs.com/v3/site-explorer/domain-rating');
-    drUrl.searchParams.set('select', 'domain_rating,ahrefs_rank');
-    drUrl.searchParams.set('target', domain);
-    drUrl.searchParams.set('mode', 'domain');
-
-    // 2. バックリンク概要
-    const blUrl = new URL('https://api.ahrefs.com/v3/site-explorer/backlinks-stats');
-    blUrl.searchParams.set('select', 'live_refdomains,live_backlinks');
-    blUrl.searchParams.set('target', domain);
-    blUrl.searchParams.set('mode', 'domain');
-    blUrl.searchParams.set('protocol', 'both');
-
-    // 3. オーガニックトラフィック概要
-    const metricsUrl = new URL('https://api.ahrefs.com/v3/site-explorer/metrics');
-    metricsUrl.searchParams.set('select', 'org_traffic,org_keywords');
-    metricsUrl.searchParams.set('target', domain);
-    metricsUrl.searchParams.set('mode', 'domain');
-
     const FETCH_OPTS = {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -79,47 +58,68 @@ export default async function handler(req, res) {
       signal: AbortSignal.timeout(8000),
     };
 
+    // 1. ドメインレーティング
+    const drUrl = `https://api.ahrefs.com/v3/site-explorer/domain-rating?target=${domain}&mode=domain&select=domain_rating`;
+    // 2. バックリンク概要
+    const blUrl = `https://api.ahrefs.com/v3/site-explorer/backlinks-stats?target=${domain}&mode=domain&select=live_refdomains,live_backlinks`;
+    // 3. メトリクス
+    const metricsUrl = `https://api.ahrefs.com/v3/site-explorer/metrics?target=${domain}&mode=domain&select=org_traffic,org_keywords`;
+
     // 並列リクエスト実行
     const [drRes, blRes, metricsRes] = await Promise.allSettled([
-      fetch(drUrl.toString(), FETCH_OPTS),
-      fetch(blUrl.toString(), FETCH_OPTS),
-      fetch(metricsUrl.toString(), FETCH_OPTS),
+      fetch(drUrl, FETCH_OPTS).then(r => r.ok ? r.json() : null),
+      fetch(blUrl, FETCH_OPTS).then(r => r.ok ? r.json() : null),
+      fetch(metricsUrl, FETCH_OPTS).then(r => r.ok ? r.json() : null),
     ]);
 
-    async function parseAhrefsResponse(settled, label) {
-      if (settled.status === 'rejected') {
-        console.warn(`[check-llmo] ${label} リクエスト失敗:`, settled.reason);
-        return null;
-      }
-      const r = settled.value;
-      if (!r.ok) {
-        const body = await r.text().catch(() => '');
-        console.warn(`[check-llmo] ${label} HTTP ${r.status}:`, body.slice(0, 200));
-        return null;
-      }
-      return r.json().catch(() => null);
+    const drData = drRes.status === 'fulfilled' ? drRes.value : null;
+    const blData = blRes.status === 'fulfilled' ? blRes.value : null;
+    const metricsData = metricsRes.status === 'fulfilled' ? metricsRes.value : null;
+
+    // ── 【超重要】Ahrefs v3 の「配列ネスト構造」を1コずつ確実に解凍する ──
+    
+    // DRの抽出
+    let domain_rating = null;
+    if (drData?.domain_rating?.domain_rating !== undefined) {
+      domain_rating = drData.domain_rating.domain_rating;
+    } else if (Array.isArray(drData?.domain_rating) && drData.domain_rating[0]?.domain_rating !== undefined) {
+      domain_rating = drData.domain_rating[0].domain_rating;
+    } else if (drData?.domain_rating !== undefined && typeof drData.domain_rating !== 'object') {
+      domain_rating = drData.domain_rating;
     }
 
-    const [drData, blData, metricsData] = await Promise.all([
-      parseAhrefsResponse(drRes, 'domain-rating'),
-      parseAhrefsResponse(blRes, 'backlinks-stats'),
-      parseAhrefsResponse(metricsRes, 'metrics'),
-    ]);
+    // 参照ドメイン・バックリンクの抽出
+    let referring_domains = null;
+    let backlinks = null;
+    const blTarget = blData?.metrics || blData;
+    if (Array.isArray(blTarget)) {
+      referring_domains = blTarget[0]?.live_refdomains ?? null;
+      backlinks = blTarget[0]?.live_backlinks ?? null;
+    } else if (blTarget) {
+      referring_domains = blTarget.live_refdomains ?? null;
+      backlinks = blTarget.live_backlinks ?? null;
+    }
 
-    // ── 【修正箇所】Ahrefs v3 のネストされたデータ構造から正しく数値を抽出 ──
-    const domain_rating     = drData?.domain_rating?.domain_rating ?? drData?.domain_rating ?? null;
-    const referring_domains = blData?.metrics?.live_refdomains     ?? blData?.live_refdomains ?? null;
-    const backlinks         = blData?.metrics?.live_backlinks      ?? blData?.live_backlinks  ?? null;
-    const organic_traffic   = metricsData?.metrics?.org_traffic    ?? metricsData?.org_traffic ?? null;
-    const organic_keywords  = metricsData?.metrics?.org_keywords   ?? metricsData?.org_keywords ?? null;
+    // トラフィックの抽出
+    let organic_traffic = null;
+    let organic_keywords = null;
+    const metricsTarget = metricsData?.metrics || metricsData;
+    if (Array.isArray(metricsTarget)) {
+      organic_traffic = metricsTarget[0]?.org_traffic ?? null;
+      organic_keywords = metricsTarget[0]?.org_keywords ?? null;
+    } else if (metricsTarget) {
+      organic_traffic = metricsTarget.org_traffic ?? null;
+      organic_keywords = metricsTarget.org_keywords ?? null;
+    }
 
+    // 【最終防衛策】もしこれでも解凍できなかった場合、Ahrefsが返した生データをそのままフロントに渡して無理やり表示させる
     const responsePayload = {
       domain,
-      domain_rating,
-      referring_domains,
-      backlinks,
-      organic_traffic,
-      organic_keywords,
+      domain_rating: domain_rating ?? drData?.domain_rating ?? null,
+      referring_domains: referring_domains ?? blData?.live_refdomains ?? null,
+      backlinks: backlinks ?? blData?.live_backlinks ?? null,
+      organic_traffic: organic_traffic ?? metricsData?.org_traffic ?? null,
+      organic_keywords: organic_keywords ?? metricsData?.org_keywords ?? null,
       source: 'ahrefs',
       fetched_at: new Date().toISOString(),
     };
@@ -128,7 +128,6 @@ export default async function handler(req, res) {
     return res.status(200).json(responsePayload);
 
   } catch (err) {
-    console.error('[check-llmo] 予期せぬエラー:', err);
     return res.status(200).json({
       domain,
       domain_rating:     null,
