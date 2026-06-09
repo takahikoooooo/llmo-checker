@@ -7,14 +7,14 @@
       "use": "@vercel/static"
     },
     {
-      "src": "api/check-llmo.js",
+      "src": "API/check-llmo.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "dest": "/API/$1"
     },
     {
       "src": "/(.*)",
@@ -23,7 +23,7 @@
   ],
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/API/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "no-store" }
       ]
