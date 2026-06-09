@@ -58,9 +58,12 @@ export default async function handler(req, res) {
   //   domain-rating  → select不要、mode=domainのみ
   //   backlinks-stats → select指定あり
   //   metrics        → select指定あり、country=jpで日本データ
-  const drUrl      = `https://api.ahrefs.com/v3/site-explorer/domain-rating?target=${encodeURIComponent(domain)}&mode=domain`;
-  const blUrl      = `https://api.ahrefs.com/v3/site-explorer/backlinks-stats?target=${encodeURIComponent(domain)}&mode=domain`;
-  const metricsUrl = `https://api.ahrefs.com/v3/site-explorer/metrics?target=${encodeURIComponent(domain)}&mode=domain&country=jp`;
+  // 今日の日付を YYYY-MM-DD 形式で取得
+  const today = new Date().toISOString().slice(0, 10);
+
+  const drUrl      = `https://api.ahrefs.com/v3/site-explorer/domain-rating?target=${encodeURIComponent(domain)}&mode=domain&date=${today}`;
+  const blUrl      = `https://api.ahrefs.com/v3/site-explorer/backlinks-stats?target=${encodeURIComponent(domain)}&mode=domain&date=${today}`;
+  const metricsUrl = `https://api.ahrefs.com/v3/site-explorer/metrics?target=${encodeURIComponent(domain)}&mode=domain&country=jp&date=${today}`;
 
   // 各リクエストの生レスポンスを保存（デバッグ用）
   const debugInfo = { drUrl, blUrl, metricsUrl };
