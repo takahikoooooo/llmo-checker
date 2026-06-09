@@ -172,7 +172,6 @@ export default async function handler(req, res) {
       organic_keywords:  null,
       source:            'error_fallback',
       error:             err.message,
-      _debug:            debugInfo,
     });
   }
 }
